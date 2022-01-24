@@ -15,6 +15,8 @@ spec:
       containers:
       - image: rohitkandiyal/nginx_dynamic:1.0
         name: nginx-dynamic-container
+	args:
+        - WebloGic
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80

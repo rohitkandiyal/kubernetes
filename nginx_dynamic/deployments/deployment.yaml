@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-dynamic-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-dynamic
+  template:
+    metadata:
+      labels:
+        app: nginx-dynamic
+    spec:
+      containers:
+      - image: rohitkandiyal/nginx_dynamic:1.0
+        name: nginx-dynamic-container
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /dynamic
+            port: 80

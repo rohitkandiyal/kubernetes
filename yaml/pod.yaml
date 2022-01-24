@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: httpbin
+  labels:
+    app: httpbin
+  namespace: httpbin
+spec:
+  containers:
+  - image: kennethreitz/httpbin
+    name: httpbin-container
+    imagePullPolicy: IfNotPresent
+    ports:
+    - containerPort: 80
+      protocol: TCP
+    livenessProbe:
+      httpGet:
+        path: /ip
+        port: 80

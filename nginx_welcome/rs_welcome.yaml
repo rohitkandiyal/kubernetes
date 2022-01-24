@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-welcome-rs
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-welcome
+  template:
+    metadata:
+      labels:
+        app: nginx-welcome
+    spec:
+      containers:
+      - image: rohitkandiyal/nginx_welcome:1
+        name: nginx-welcome-container
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /welcome
+            port: 80

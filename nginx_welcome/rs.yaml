@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-bye-rs
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-bye
+  template:
+    metadata:
+      labels:
+        app: nginx-bye
+    spec:
+      containers:
+      - image: rohitkandiyal/nginx_bye:1
+        name: nginx-bye-container
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /bye
+            port: 80

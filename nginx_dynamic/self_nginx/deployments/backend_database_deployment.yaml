@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-database-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-database
+  template:
+    metadata:
+      labels:
+        app: backend-database
+    spec:
+      containers:
+      - image: rohitkandiyal/nginx_dynamic:1.0
+        name: nginx-dynamic-container
+        args:
+        - DataBAse
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /dynamic
+            port: 80

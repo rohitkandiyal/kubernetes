@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-dynamic-dep
+  name: frontend-apache-dep
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx-dynamic
+      app: frontend-apache
   template:
     metadata:
       labels:
-        app: nginx-dynamic
+        app: frontend-apache
     spec:
       containers:
       - image: rohitkandiyal/nginx_dynamic:1.0
         name: nginx-dynamic-container
-	args:
-        - WebloGic
+        args:
+        - ApaChe
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80

@@ -16,6 +16,6 @@ spec:
         version: v1
     spec:
       containers:
-      - image: kodekloud/examplevotingapp_worker
+      - image: kodekloud/examplevotingapp_worker:v1
         name: worker-app
         imagePullPolicy: IfNotPresent

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gatekeeper-test-policy
+  labels:
+    owner: rohit
+#    gatekeeper: ok

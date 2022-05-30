@@ -1,0 +1,69 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"templates.gatekeeper.sh/v1","kind":"ConstraintTemplate","metadata":{"annotations":{},"name":"k8srequiredlabels"},"spec":{"crd":{"spec":{"names":{"kind":"K8sRequiredLabels"},"validation":{"openAPIV3Schema":{"properties":{"labels":{"items":{"type":"string"},"type":"array"}},"type":"object"}}}},"targets":[{"rego":"package k8srequiredlabels\n\nviolation[{\"msg\": msg, \"details\": {\"missing_labels\": missing}}] {\n  provided := {label | input.review.object.metadata.labels[label]}\n  required := {label | label := input.parameters.labels[_]}\n  missing := required - provided\n  count(missing) \u003e 0\n  msg := sprintf(\"you must provide labels: %v\", [missing])\n}\n","target":"admission.k8s.gatekeeper.sh"}]}}
+  creationTimestamp: "2022-05-04T10:03:31Z"
+  generation: 1
+  name: k8srequiredlabels
+  resourceVersion: "119440"
+  uid: b4a641f2-3ad1-4c3f-870d-99a7b96833f7
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequiredLabels
+      validation:
+        legacySchema: false
+        openAPIV3Schema:
+          properties:
+            labels:
+              items:
+                type: string
+              type: array
+          type: object
+  targets:
+  - rego: |
+      package k8srequiredlabels
+
+      violation[{"msg": msg, "details": {"missing_labels": missing}}] {
+        provided := {label | input.review.object.metadata.labels[label]}
+        required := {label | label := input.parameters.labels[_]}
+        missing := required - provided
+        count(missing) > 0
+        msg := sprintf("you must provide labels: %v", [missing])
+      }
+    target: admission.k8s.gatekeeper.sh
+status:
+  byPod:
+  - id: gatekeeper-audit-68d875d865-dk758
+    observedGeneration: 1
+    operations:
+    - audit
+    - mutation-status
+    - status
+    templateUID: b4a641f2-3ad1-4c3f-870d-99a7b96833f7
+  - id: gatekeeper-controller-manager-7c6d5d97fc-2s999
+    observedGeneration: 1
+    operations:
+    - mutation-webhook
+    - webhook
+    templateUID: b4a641f2-3ad1-4c3f-870d-99a7b96833f7
+  - id: gatekeeper-controller-manager-7c6d5d97fc-dqtgz
+    observedGeneration: 1
+    operations:
+    - mutation-webhook
+    - webhook
+    templateUID: b4a641f2-3ad1-4c3f-870d-99a7b96833f7
+  - id: gatekeeper-controller-manager-7c6d5d97fc-r7xbl
+    observedGeneration: 1
+    operations:
+    - mutation-webhook
+    - webhook
+    templateUID: b4a641f2-3ad1-4c3f-870d-99a7b96833f7
+  created: true

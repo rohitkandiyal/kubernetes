@@ -1,0 +1,23 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8checkdeprecatedapis
+  annotations:
+    description: >-
+      Requires container images to begin with a string from the specified list.
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8CheckDeprecatedAPIs
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8checkdeprecatedapis
+
+        violation[{"msg": msg}] {
+          version := input.request.kind.version
+          satisfied := [good | api = "networking.k8s.io\/v1beta1" ; good = startswith(version, api)]
+          any(satisfied)
+          msg := sprintf("GateKeeper: API <%v> is deprecated", [version])
+        }

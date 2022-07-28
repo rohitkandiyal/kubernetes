@@ -1,0 +1,20 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: checkreviewobj
+  annotations:
+    description: >-
+      This is to create the review obj needed as input while creating other const templates rego.
+spec:
+  crd:
+    spec:
+      names:
+        kind: CheckReviewObj
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package checkreviewobj
+
+        violation[{"msg": msg}] {
+          msg := sprintf("REVIEW OBJ:  %v", [input.review])
+        }

@@ -1,0 +1,26 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8srequiredrunasnonroot
+  annotations:
+    description: >-
+      Requires containers in Pod to mandatorily run as NonRoot .
+spec:
+  crd:
+    spec:
+      names:
+        kind: k8sRequiredRunAsNonroot
+      validation:
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8srequiredrunasnonroot
+
+        violation[{"msg": msg}] {
+          not input.review.object.spec.securityContext.runAsNonRoot
+          msg := sprintf("Pod %v must have securityContext.runAsNonRoot defined as true" ,[input.review.object.metadata.name])
+        }
+        violation[{"msg": msg}] {
+          input.review.object.spec.securityContext.seLinuxOptions
+          msg := sprintf("Pod %v has securityContext.seLinuxOptions defined which is restricted" ,[input.review.object.metadata.name])
+        }

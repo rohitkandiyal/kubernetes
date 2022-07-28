@@ -1,0 +1,49 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8sallowedregistry
+  annotations:
+    description: >-
+      Requires container images to begin with a string from the specified list.
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sAllowedRegistry
+      validation:
+        # Schema for the `parameters` field
+        openAPIV3Schema:
+          type: object
+          properties:
+            registry:
+              description: The list of prefixes a container image is allowed to have.
+              type: array
+              items:
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sallowedregistry
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          satisfied := [good | registry = input.parameters.registry[_] ; good = startswith(container.image, registry)]
+          not any(satisfied)
+          msg := sprintf("container <%v> has an invalid image registry <%v>, allowed registries are %v", [container.name, container.image, input.parameters.registry])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.initContainers[_]
+          satisfied := [good | registry = input.parameters.registry[_] ; good = startswith(container.image, registry)]
+          not any(satisfied)
+          msg := sprintf("container <%v> has an invalid image registry <%v>, allowed registries are %v", [container.name, container.image, input.parameters.registry])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.ephemeralContainers[_]
+          satisfied := [good | registry = input.parameters.registry[_] ; good = startswith(container.image, registry)]
+          not any(satisfied)
+          msg := sprintf("container <%v> has an invalid image registry <%v>, allowed registries are %v", [container.name, container.image, input.parameters.registry])
+        }
+        
+

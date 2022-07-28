@@ -1,0 +1,11 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: k8sRequiredRunAsNonroot
+metadata:
+  name: ns-pod-must-have-securitycontext-runasnonroot
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces:
+      - "test-gatekeeper"

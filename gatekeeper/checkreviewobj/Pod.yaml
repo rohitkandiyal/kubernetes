@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-security-context
+  labels:
+    CostCenter: "yes"
+    app: test-security-context
+  namespace: test-gatekeeper
+spec:
+  securityContext:
+    runAsNonRoot: true 
+  containers:
+  - image: kennethreitz/httpbin
+    name: test-security-context-container
+    imagePullPolicy: IfNotPresent
+    ports:
+    - containerPort: 80
+      protocol: TCP
+    livenessProbe:
+      httpGet:
+        path: /ip
+        port: 80

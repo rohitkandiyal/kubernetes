@@ -1,0 +1,22 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8CheckDeprecatedAPIs
+metadata:
+  name: opa-policy-check-deprecated-apis-v122
+spec:
+  match:
+    kinds:
+      - apiGroups: ["*"]
+        kinds: ["*"]
+    namespaces:
+      - "test-gatekeeper"
+#    excludedNamespaces:
+#      - kube-*
+#      - datadog
+#      - twistlock
+#      - kong-*
+#      - kubecost
+#      - gatekeeper-system
+#      - fleet-system
+#      - cattle-system
+#      - backstage
+#      - argocd

@@ -1,0 +1,15 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sAllowedRegistry
+metadata:
+  name: ns-pod-must-have-costcenter
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces:
+      - "test-gatekeeper"
+  parameters:
+    registry:
+      - "bcgprod.jfrog.io"
+      - "068874145936.dkr.ecr.eu-central-1.amazonaws.com"

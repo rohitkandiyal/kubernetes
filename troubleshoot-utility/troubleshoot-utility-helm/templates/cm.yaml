@@ -1,6 +1,7 @@
 apiVersion: v1
 data:
-  username: rohit_kandiyal
+  username: {{ .Values.username.firstname }}_{{ .Values.username.lastname }}
 kind: ConfigMap
 metadata:
-  name: troubleshoot-utility-cm
+  name: {{ .Release.Name }}-cm
+
